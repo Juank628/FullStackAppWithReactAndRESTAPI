@@ -7,7 +7,7 @@ export default class CourseDetail extends Component {
   };
 
   componentDidMount() {
-    fetch(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
+    fetch(`${this.props.context.baseUrl}/courses/${this.props.match.params.id}`)
       .then(data => data.json())
       .then(course => this.setState({ ...course }))
       .catch(err => console.log(err));

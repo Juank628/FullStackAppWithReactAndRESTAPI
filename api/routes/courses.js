@@ -73,7 +73,7 @@ router.post("/", authenticateUser, (req, res) => {
   if (reqCourse.title) {
     Course.findOne({ where: { title: reqCourse.title } }).then(foundCourse => {
       if (foundCourse) {
-        res.status(409).json({ error: "the course alredy exist" });
+        res.status(400).json({ errors: ["the course alredy exist"] });
       } else {
         Course.create(reqCourse)
           .then(createdCourse =>
@@ -94,7 +94,7 @@ router.post("/", authenticateUser, (req, res) => {
       }
     });
   } else {
-    res.status(400).json({ error: "title is required" });
+    res.status(400).json({ errors: ["title is required"] });
   }
 });
 

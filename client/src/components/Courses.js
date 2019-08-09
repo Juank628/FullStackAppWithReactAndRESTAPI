@@ -7,7 +7,7 @@ export default class Courses extends Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:5000/api/courses")
+    fetch(`${this.props.context.baseUrl}/courses`)
       .then(data => data.json())
       .then(courses => this.setState({ courses: courses }))
       .catch(err => console.log(err));
@@ -27,9 +27,9 @@ export default class Courses extends Component {
         ))}
 
         <div className="grid-33">
-          <a
+          <Link
             className="course--module course--add--module"
-            href="create-course.html"
+            to={'courses/create'}
           >
             <h3 className="course--add--title">
               <svg
@@ -44,9 +44,8 @@ export default class Courses extends Component {
               </svg>
               New Course
             </h3>
-          </a>
+          </Link>
         </div>
       </div>
-    );
-  }
-}
+      )
+    }}
