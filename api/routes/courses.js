@@ -31,6 +31,7 @@ const authenticateUser = (req, res, next) => {
 router.get("/", (req, res) => {
   Course.findAll({
     attributes: [
+      "id",
       "title",
       "description",
       "estimatedTime",
