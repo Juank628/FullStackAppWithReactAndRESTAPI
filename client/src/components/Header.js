@@ -1,12 +1,34 @@
-import React from 'react'
+import React from "react";
+import { Link } from "react-router-dom";
 
-export default function Header() {
-    return (
-        <div className="header">
-            <div className="bounds">
-                <h1 className="header--logo">Courses</h1>
-                <nav><span>Welcome Joe Smith!</span><a className="signout" href="index.html">Sign Out</a></nav>
-            </div>
-        </div>
-    )
+export default function Header(props) {
+  const { logedUser } = props.context.login;
+
+  return (
+    <div className="header">
+      <div className="bounds">
+        <h1 className="header--logo">Courses</h1>
+        {logedUser.Authorization ? (
+          <nav>
+            <span>
+              Welcome {logedUser.firstName} {logedUser.lastName}!
+            </span>
+            <Link
+              className="signout"
+              to={"/signin"}
+              onClick={() => props.context.actions.signOut()}
+            >
+              Sign Out
+            </Link>
+          </nav>
+        ) : (
+          <nav>
+            <Link className="signin" to={"/signin"}>
+              Sign In
+            </Link>
+          </nav>
+        )}
+      </div>
+    </div>
+  );
 }

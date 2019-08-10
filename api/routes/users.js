@@ -17,22 +17,23 @@ const authenticateUser = (req, res, next) => {
           req.logedUser = user;
           next();
         } else {
-          res.status(401).json({ error: "access denied" });
+          res.status(401).json({ errors: ["access denied"] });
         }
       } else {
-        res.status(401).json({ error: "user does not exist" });
+        res.status(401).json({ errors: ["user does not exist"] });
       }
     });
   } else {
-    res.status(401).json({ error: "no credentials received" });
+    res.status(401).json({ errors: ["no credentials received"] });
   }
 };
 
 router.get("/", authenticateUser, (req, res) => {
   res.json({
+    id: req.logedUser.id,
     firstName: req.logedUser.firstName,
     lastName: req.logedUser.lastName,
-    email: req.logedUser.emailAddress
+    emailAddress: req.logedUser.emailAddress
   });
 });
 
@@ -43,7 +44,7 @@ router.post("/", (req, res) => {
     User.findOne({ where: { emailAddress: reqUser.emailAddress } })
       .then(foundUser => {
         if (foundUser) {
-          res.status(409).json({ error: "the user alredy exist" });
+          res.status(409).json({ errors: ["the user alredy exist"] });
         } else {
           if (reqUser.password) {
             reqUser.password = bcrypt.hashSync(reqUser.password);
@@ -76,7 +77,7 @@ router.post("/", (req, res) => {
       })
       .catch(err => res.status(400).json({ error: err.message }));
   } else {
-    res.status(400).json({ error: "email is required" });
+    res.status(400).json({ errors: ["email is required"] });
   }
 });
 

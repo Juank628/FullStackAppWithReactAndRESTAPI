@@ -43,13 +43,13 @@ class UpdateCourse extends Component {
       body: JSON.stringify(this.state.newCourse),
       headers: {
         "Content-Type": "application/json",
-        Authorization: context.actions.getAuth()
+        Authorization: context.login.logedUser.Authorization
       }
     };
     fetch(`${context.baseUrl}/courses/${this.props.match.params.id}`, options)
       .then(res => {
         if (res.status >= 200 && res.status <= 299) {
-          this.props.history.push(`/courses/${this.props.match.params.id}`)
+          this.props.history.push(`/courses/${this.props.match.params.id}`);
         } else if (res.status === 400) {
           res.json().then(data => this.setState({ errors: data.errors }));
         }
@@ -59,7 +59,12 @@ class UpdateCourse extends Component {
 
   render() {
     const { errors } = this.state;
-    const {title, description, estimatedTime, materialsNeeded} = this.state.newCourse
+    const {
+      title,
+      description,
+      estimatedTime,
+      materialsNeeded
+    } = this.state.newCourse;
     return (
       <div className="bounds course--detail">
         <h1>Update Course</h1>
@@ -143,7 +148,11 @@ class UpdateCourse extends Component {
               <button className="button" type="submit">
                 Update Course
               </button>
-              <button className="button button-secondary" onClick={()=>this.props.history.push('/')}>
+              <button
+                className="button button-secondary"
+                type="button"
+                onClick={() => this.props.history.push("/")}
+              >
                 Cancel
               </button>
             </div>

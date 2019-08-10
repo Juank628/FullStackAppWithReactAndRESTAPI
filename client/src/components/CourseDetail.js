@@ -20,7 +20,7 @@ class CourseDetail extends Component {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: context.actions.getAuth()
+        Authorization: context.login.logedUser.Authorization
       }
     };
     fetch(`${context.baseUrl}/courses/${id}`, options)

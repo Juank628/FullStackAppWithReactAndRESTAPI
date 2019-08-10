@@ -8,7 +8,7 @@ class CreateCourse extends Component {
       description: "",
       estimatedTime: "",
       materialsNeeded: "",
-      userId: "3"
+      userId: this.props.context.login.logedUser.id
     },
     errors: []
   };
@@ -32,7 +32,7 @@ class CreateCourse extends Component {
       body: JSON.stringify(this.state.newCourse),
       headers: {
         "Content-Type": "application/json",
-        Authorization: context.actions.getAuth()
+        Authorization: context.login.logedUser.Authorization
       }
     };
     fetch(`${context.baseUrl}/courses`, options)
@@ -133,6 +133,7 @@ class CreateCourse extends Component {
               </button>
               <button
                 className="button button-secondary"
+                type="button"
                 onClick={()=>this.props.history.push('/')}
               >
                 Cancel

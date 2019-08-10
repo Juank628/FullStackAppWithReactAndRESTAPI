@@ -8,21 +8,89 @@ export class Provider extends Component {
 
   state = {
     baseUrl: "http://localhost:5000/api",
-    logedUser: {
-        userName: "jsanchez_zunino@yahoo.com",
-        password: "1234"
+    login: {
+      logedUser: {
+        id: "",
+        emailAddress: "",
+        firtName: "",
+        lastName: "",
+        Authorization: null
+      },
+      errors: [],
     }
   };
 
-  getAuth = () => {
-    return "Basic " + btoa(`jsanchez_zunino@yahoo.com:1234`)
+  signIn = (emailAddress, password) => {
+    const encCredentials = "Basic " + btoa(`${emailAddress}:${password}`);
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: encCredentials
+      }
+    };
+    fetch(`${this.state.baseUrl}/users`, options)
+      .then(res => {
+        if (res.status >= 200 && res.status <= 299) {
+          res.json().then(user => {
+            this.setState(prevState => ({
+              ...prevState,
+              login: {
+                logedUser:{
+                  ...user,
+                  Authorization: encCredentials
+                },
+                errors: []
+              }
+            }));
+          });
+        } else if (res.status === 401) {
+          res.json().then(data => {
+            this.setState(prevState => ({
+              ...prevState,
+              login: {
+                logedUser: prevState.login.logedUser,
+                errors: data.errors
+              }
+            }))
+          })
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
+  clearLoginErrors = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      login: {
+        logedUser: prevState.login.logedUser,
+        errors: []
+      }
+    }))
+  }
+
+  signOut = () => {
+    this.setState(prevState => ({
+      ...prevState,
+      login: {
+        logedUser: {
+          id: "",
+          emailAddress: "",
+          firtName: "",
+          lastName: "",
+          Authorization: null
+        },
+        errors: [],
+      }
+    }))
   }
 
   render() {
     const value = {
       ...this.state,
       actions: {
-          getAuth: this.getAuth
+        signIn: this.signIn,
+        signOut: this.signOut,
+        clearLoginErrors: this.clearLoginErrors
       }
     };
 

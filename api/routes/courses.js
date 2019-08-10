@@ -17,14 +17,14 @@ const authenticateUser = (req, res, next) => {
           req.logedUser = user;
           next();
         } else {
-          res.status(401).json({ error: "access denied" });
+          res.status(401).json({ errors: ["access denied"] });
         }
       } else {
-        res.status(401).json({ error: "user does not exist" });
+        res.status(401).json({ errors: ["user does not exist"] });
       }
     });
   } else {
-    res.status(401).json({ error: "no credentials received" });
+    res.status(401).json({ errors: ["no credentials received"] });
   }
 };
 
@@ -63,7 +63,7 @@ router.get("/:id", (req, res) => {
     if (course) {
       res.json({ course });
     } else {
-      res.status(404).json({ error: "course not found" });
+      res.status(404).json({ errors: ["course not found"] });
     }
   });
 });
@@ -121,10 +121,10 @@ router.put("/:id", authenticateUser, (req, res) => {
         } else {
           res
             .status(403)
-            .json({ error: "current user doesn't own the requested course" });
+            .json({ errors: ["current user doesn't own the requested course"] });
         }
       } else {
-        res.status(404).json({ error: "course not found" });
+        res.status(404).json({ errors: ["course not found"] });
       }
     });
   } else {
@@ -143,10 +143,10 @@ router.delete("/:id", authenticateUser, (req, res) => {
       } else {
         res
           .status(403)
-          .json({ error: "current user doesn't own the requested course" });
+          .json({ errors: ["current user doesn't own the requested course"] });
       }
     } else {
-      res.status(404).json({ error: "course not found" });
+      res.status(404).json({ errors: ["course not found"] });
     }
   });
 });
