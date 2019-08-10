@@ -51,6 +51,7 @@ router.get("/:id", (req, res) => {
   Course.findOne({
     where: { id: req.params.id },
     attributes: [
+      "id",
       "title",
       "description",
       "estimatedTime",

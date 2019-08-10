@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import {Link} from 'react-router-dom';
+import { Link, withRouter } from "react-router-dom";
 
-export default class CourseDetail extends Component {
+class CourseDetail extends Component {
   state = {
     course: {}
   };
@@ -13,6 +13,21 @@ export default class CourseDetail extends Component {
       .catch(err => console.log(err));
   }
 
+  deleteCourse = () => {
+    const { context } = this.props;
+    const { id } = this.state.course;
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: context.actions.getAuth()
+      }
+    };
+    fetch(`${context.baseUrl}/courses/${id}`, options)
+      .then(() => this.props.history.push("/"))
+      .catch(err => console.log(err));
+  };
+
   render() {
     const { course } = this.state;
 
@@ -22,12 +37,15 @@ export default class CourseDetail extends Component {
           <div className="bounds">
             <div className="grid-100">
               <span>
-                <a className="button" href="update-course.html">
+                <Link
+                  className="button"
+                  to={`/courses/${this.state.course.id}/update`}
+                >
                   Update Course
-                </a>
-                <a className="button" href="#">
+                </Link>
+                <div className="button" to={"/"} onClick={this.deleteCourse}>
                   Delete Course
-                </a>
+                </div>
               </span>
               <Link className="button button-secondary" to="/">
                 Return to List
@@ -62,13 +80,14 @@ export default class CourseDetail extends Component {
               <li className="course--stats--list--item">
                 <h4>Materials Needed</h4>
                 <ul>
-                  {course.materialsNeeded ? 
-                    (course.materialsNeeded
-                        .split('*')
-                        .slice(1)
-                        .map((item,index) => <li key={index}> {item}</li>)) 
-                    : 
-                    <li>No materials needed</li>}
+                  {course.materialsNeeded ? (
+                    course.materialsNeeded
+                      .split("*")
+                      .slice(1)
+                      .map((item, index) => <li key={index}> {item}</li>)
+                  ) : (
+                    <li>No materials needed</li>
+                  )}
                 </ul>
               </li>
             </ul>
@@ -78,3 +97,5 @@ export default class CourseDetail extends Component {
     );
   }
 }
+
+export default withRouter(CourseDetail);

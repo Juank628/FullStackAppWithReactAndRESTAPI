@@ -8,15 +8,10 @@ class CreateCourse extends Component {
       description: "",
       estimatedTime: "",
       materialsNeeded: "",
-      userId: "1"
+      userId: "3"
     },
     errors: []
   };
-
-  cancel = e => {
-    e.preventDefault();
-    this.props.history.push('/')
-  }
 
   inputChange = e => {
     const target = e.target.name;
@@ -42,8 +37,8 @@ class CreateCourse extends Component {
     };
     fetch(`${context.baseUrl}/courses`, options)
       .then(res => {
-        if (res.status === 201) {
-          return [];
+        if (res.status >= 200 && res.status <= 299) {
+          this.props.history.push('/')
         } else if (res.status === 400) {
           res.json().then(data => this.setState({ errors: data.errors }));
         }
@@ -53,6 +48,8 @@ class CreateCourse extends Component {
 
   render() {
     const { errors } = this.state;
+    const {title, description, estimatedTime, materialsNeeded} = this.state.newCourse
+
     return (
       <div className="bounds course--detail">
         <h1>Create Course</h1>
@@ -78,6 +75,7 @@ class CreateCourse extends Component {
                     type="text"
                     className="input-title course--title--input"
                     placeholder="Course title..."
+                    value={title}
                     onChange={this.inputChange}
                   />
                 </div>
@@ -90,6 +88,7 @@ class CreateCourse extends Component {
                     name="description"
                     className=""
                     placeholder="Course description..."
+                    value={description}
                     onChange={this.inputChange}
                   />
                 </div>
@@ -107,6 +106,7 @@ class CreateCourse extends Component {
                         type="text"
                         className="course--time--input"
                         placeholder="Hours"
+                        value={estimatedTime}
                         onChange={this.inputChange}
                       />
                     </div>
@@ -119,6 +119,7 @@ class CreateCourse extends Component {
                         name="materialsNeeded"
                         className=""
                         placeholder="List materials..."
+                        value={materialsNeeded}
                         onChange={this.inputChange}
                       />
                     </div>
@@ -132,7 +133,7 @@ class CreateCourse extends Component {
               </button>
               <button
                 className="button button-secondary"
-                onClick={this.cancel}
+                onClick={()=>this.props.history.push('/')}
               >
                 Cancel
               </button>
