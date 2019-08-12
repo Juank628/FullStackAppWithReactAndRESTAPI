@@ -30,23 +30,26 @@ class CourseDetail extends Component {
 
   render() {
     const { course } = this.state;
+    const { logedUser } = this.props.context.login;
 
     return (
       <div>
         <div className="actions--bar">
           <div className="bounds">
             <div className="grid-100">
-              <span>
-                <Link
-                  className="button"
-                  to={`/courses/${this.state.course.id}/update`}
-                >
-                  Update Course
-                </Link>
-                <div className="button" to={"/"} onClick={this.deleteCourse}>
-                  Delete Course
-                </div>
-              </span>
+              {course.userId === logedUser.id ? (
+                <span>
+                  <Link
+                    className="button"
+                    to={`/courses/${this.state.course.id}/update`}
+                  >
+                    Update Course
+                  </Link>
+                  <div className="button" to={"/"} onClick={this.deleteCourse}>
+                    Delete Course
+                  </div>
+                </span>
+              ) : null}
               <Link className="button button-secondary" to="/">
                 Return to List
               </Link>

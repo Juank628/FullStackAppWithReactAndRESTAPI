@@ -16,7 +16,13 @@ class UserSignIn extends Component {
     e.preventDefault();
     const { emailAddress, password } = this.state;
     const { context } = this.props;
-    context.actions.signIn(emailAddress, password);
+    const from = this.props.location.state || {from: {pathname: '/'}}
+    context.actions.signIn(emailAddress, password)
+    .then(loginSuccess => {
+      if(loginSuccess){
+        this.props.history.push(from.from.pathname)
+      }
+    });
   };
 
   componentWillUnmount() {
@@ -26,7 +32,6 @@ class UserSignIn extends Component {
   render() {
     const { emailAddress, password } = this.state;
     const { errors } = this.props.context.login;
-    const from = this.props.location.state || {from: {pathname: '/authenticated'}}
     return (
       <div className="bounds">
         <div className="grid-33 centered signin">

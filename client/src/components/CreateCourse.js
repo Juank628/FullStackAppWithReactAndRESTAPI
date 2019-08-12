@@ -59,7 +59,7 @@ class CreateCourse extends Component {
               <h2 className="validation--errors--label">Validation errors</h2>
               <div className="validation-errors">
                 <ul>
-                  {errors.map(error => (<li>{error}</li>))}
+                  {errors.map((error, index) => (<li key={index}>{error}</li>))}
                 </ul>
               </div>
             </div>

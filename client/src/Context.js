@@ -2,7 +2,6 @@ import React, { Component } from "react";
 const Context = React.createContext();
 
 export class Provider extends Component {
-
   state = {
     baseUrl: "http://localhost:5000/api",
     login: {
@@ -13,11 +12,13 @@ export class Provider extends Component {
         lastName: "",
         Authorization: null
       },
-      errors: [],
+      errors: []
     }
   };
 
-  signIn = (emailAddress, password) => {
+  signIn = async (emailAddress, password) => {
+    let loginSuccess = false
+    let data = {}
     const encCredentials = "Basic " + btoa(`${emailAddress}:${password}`);
     const options = {
       headers: {
@@ -25,34 +26,41 @@ export class Provider extends Component {
         Authorization: encCredentials
       }
     };
-    fetch(`${this.state.baseUrl}/users`, options)
+
+    await fetch(`${this.state.baseUrl}/users`, options)
       .then(res => {
+        data = res
         if (res.status >= 200 && res.status <= 299) {
-          res.json().then(user => {
-            this.setState(prevState => ({
-              ...prevState,
-              login: {
-                logedUser:{
-                  ...user,
-                  Authorization: encCredentials
-                },
-                errors: []
-              }
-            }));
-          });
+          loginSuccess = true
         } else if (res.status === 401) {
-          res.json().then(data => {
-            this.setState(prevState => ({
-              ...prevState,
-              login: {
-                logedUser: prevState.login.logedUser,
-                errors: data.errors
-              }
-            }))
-          })
+          loginSuccess = false
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+    
+    await data.json().then(user => {
+      if(loginSuccess){
+        this.setState(prevState => ({
+          ...prevState,
+          login: {
+            logedUser: {
+              ...user,
+              Authorization: encCredentials
+            },
+            errors: []
+          }
+        }))
+      } else{
+        this.setState(prevState => ({
+          ...prevState,
+          login: {
+            logedUser: prevState.login.logedUser,
+            errors: user.errors
+          }
+        }));
+      }
+    })
+    return loginSuccess
   };
 
   clearLoginErrors = () => {
@@ -62,8 +70,8 @@ export class Provider extends Component {
         logedUser: prevState.login.logedUser,
         errors: []
       }
-    }))
-  }
+    }));
+  };
 
   signOut = () => {
     this.setState(prevState => ({
@@ -76,10 +84,10 @@ export class Provider extends Component {
           lastName: "",
           Authorization: null
         },
-        errors: [],
+        errors: []
       }
-    }))
-  }
+    }));
+  };
 
   render() {
     const value = {

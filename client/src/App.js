@@ -28,12 +28,10 @@ function App() {
           {/***********private routes************/}
           <PrivRouteWithContext
             path="/courses/create"
-            restrictId={false}
             component={CreateCourseWithContext}
           />
           <PrivRouteWithContext
             path="/courses/:id/update"
-            restrictId={true}
             component={UpdateCourseWithContext}
           />
           {/***********public routes************/}
