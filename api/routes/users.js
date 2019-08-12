@@ -44,7 +44,7 @@ router.post("/", (req, res) => {
     User.findOne({ where: { emailAddress: reqUser.emailAddress } })
       .then(foundUser => {
         if (foundUser) {
-          res.status(409).json({ errors: ["the user alredy exist"] });
+          res.status(400).json({ errors: ["the user alredy exist"] });
         } else {
           if (reqUser.password) {
             reqUser.password = bcrypt.hashSync(reqUser.password);
