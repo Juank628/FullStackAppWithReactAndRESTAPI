@@ -17,6 +17,7 @@ export class Provider extends Component {
     }
   };
 
+  /*if the user was loged in, the user data is loaded from cookies*/
   componentDidMount() {
     if (Cookies.getJSON("Auth")) {
       this.setState(prevState => ({
@@ -29,6 +30,11 @@ export class Provider extends Component {
     }
   }
 
+  /*
+  if the user is registered in the database, store the user information in 
+  context and in a cookie
+  for security reasons, the user email and password is stored encoded in base64
+  */
   signIn = async (emailAddress, password) => {
     let loginSuccess = false;
     let data = {};
@@ -86,6 +92,11 @@ export class Provider extends Component {
     return loginSuccess;
   };
 
+  /*
+  clear all login errors messages
+  this function is called when close the signin page in order to
+  have a clear signin page if the user open the signin page again
+  */
   clearLoginErrors = () => {
     this.setState(prevState => ({
       ...prevState,
@@ -96,6 +107,7 @@ export class Provider extends Component {
     }));
   };
 
+  /*clear the user information from context and cookie*/
   signOut = () => {
     Cookies.remove("Auth");
     this.setState(prevState => ({

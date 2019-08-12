@@ -6,6 +6,7 @@ class Courses extends Component {
     courses: []
   };
 
+  /*get courses from api*/
   componentDidMount() {
     fetch(`${this.props.context.baseUrl}/courses`)
       .then(data => data.json())

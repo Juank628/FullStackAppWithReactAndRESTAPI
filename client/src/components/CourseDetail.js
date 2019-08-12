@@ -7,6 +7,7 @@ class CourseDetail extends Component {
     course: {}
   };
 
+  /*get course from api*/
   componentDidMount() {
     fetch(`${this.props.context.baseUrl}/courses/${this.props.match.params.id}`)
       .then(data => {
@@ -24,6 +25,7 @@ class CourseDetail extends Component {
       });
   }
 
+  /*delete a course*/
   deleteCourse = () => {
     const { context } = this.props;
     const { id } = this.state.course;

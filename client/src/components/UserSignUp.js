@@ -11,12 +11,14 @@ export default class UserSignUp extends Component {
     errors: []
   };
 
+  /*update state when form inputs change*/
   inputChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
+  /*create user*/
   createUser = e => {
     e.preventDefault();
     const {

@@ -13,15 +13,15 @@ export default function Header(props) {
             <span>
               Welcome {logedUser.firstName} {logedUser.lastName}!
             </span>
-            <Link
-              className="signout"
-              to={"/signout"}
-            >
+            <Link className="signout" to={"/signout"}>
               Sign Out
             </Link>
           </nav>
         ) : (
           <nav>
+            <Link className="signup" to={"/signup"}>
+              Sign up
+            </Link>
             <Link className="signin" to={"/signin"}>
               Sign In
             </Link>

@@ -12,6 +12,10 @@ class UpdateCourse extends Component {
     errors: []
   };
 
+  /*
+  get course information in order to fill 
+  all the form inputs with the current values
+  */
   componentDidMount() {
     fetch(`${this.props.context.baseUrl}/courses/${this.props.match.params.id}`)
       .then(data => {
@@ -37,6 +41,7 @@ class UpdateCourse extends Component {
       });
   }
 
+  /*update state when form inputs change*/
   inputChange = e => {
     const target = e.target.name;
     const value = e.target.value;
@@ -48,6 +53,7 @@ class UpdateCourse extends Component {
     }));
   };
 
+  /*update course*/
   updateCourse = e => {
     e.preventDefault();
     const { context } = this.props;

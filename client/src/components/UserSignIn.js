@@ -7,12 +7,17 @@ class UserSignIn extends Component {
     password: ""
   };
 
+  /*update state when form inputs change*/
   inputChange = e => {
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
+  /*
+  try to sign in a user
+  if success, redirect to home or to the previous screen
+  */
   submitHandler = e => {
     e.preventDefault();
     const { emailAddress, password } = this.state;
@@ -26,6 +31,7 @@ class UserSignIn extends Component {
     });
   };
 
+  /*clear all login errors when close the component*/
   componentWillUnmount() {
     this.props.context.actions.clearLoginErrors();
   }

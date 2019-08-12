@@ -13,6 +13,7 @@ class CreateCourse extends Component {
     errors: []
   };
 
+  /*update the state when form inputs change*/
   inputChange = e => {
     const target = e.target.name;
     const value = e.target.value;
@@ -24,6 +25,7 @@ class CreateCourse extends Component {
     }));
   };
 
+  /*create new course*/
   insertCourse = e => {
     e.preventDefault();
     const { context } = this.props;

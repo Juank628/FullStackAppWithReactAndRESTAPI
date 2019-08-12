@@ -11,7 +11,7 @@ import UserSignUp from "./components/UserSignUp"
 import UserSignIn from "./components/UserSignIn";
 import UserSignOut from "./components/UserSignOut";
 import PrivateRoute from "./PrivateRoute";
-import NotFounf from "./components/NotFound";
+import NotFound from "./components/NotFound";
 import Forbidden from "./components/Forbidden";
 import UnhandledError from "./components/UnhandledError"
 
@@ -46,10 +46,10 @@ function App() {
           <Route exact path="/signup" component={UserSignUpWithContext} />
           <Route exact path="/signin" component={UserSignInWithContext} />
           <Route exact path="/signout" component={UserSignOutWithContext} />
-          <Route exact path="/notfound" component={NotFounf} />
+          <Route exact path="/notfound" component={NotFound} />
           <Route exact path="/forbidden" component={Forbidden} />
           <Route exact path="/error" component={UnhandledError} />
-          <Route component={NotFounf} />
+          <Route component={NotFound} />
         </Switch>
       </div>
     </BrowserRouter>
