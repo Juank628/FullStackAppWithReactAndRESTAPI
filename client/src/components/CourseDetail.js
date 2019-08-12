@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
+const ReactMarkdown = require("react-markdown");
 
 class CourseDetail extends Component {
   state = {
@@ -8,9 +9,19 @@ class CourseDetail extends Component {
 
   componentDidMount() {
     fetch(`${this.props.context.baseUrl}/courses/${this.props.match.params.id}`)
-      .then(data => data.json())
-      .then(course => this.setState({ ...course }))
-      .catch(err => console.log(err));
+      .then(data => {
+        if (data.status === 404) {
+          this.props.history.push("/notfound");
+        } else {
+          data.json().then(course => this.setState({ ...course }));
+        }
+      })
+      .catch(err => {
+        this.props.history.push({
+          pathname: "/error",
+          state: { error: err.message }
+        });
+      });
   }
 
   deleteCourse = () => {
@@ -25,7 +36,12 @@ class CourseDetail extends Component {
     };
     fetch(`${context.baseUrl}/courses/${id}`, options)
       .then(() => this.props.history.push("/"))
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.props.history.push({
+          pathname: "/error",
+          state: { error: err.message }
+        });
+      });
   };
 
   render() {
@@ -68,7 +84,7 @@ class CourseDetail extends Component {
               </p>
             </div>
             <div className="course--description">
-              <p>{course.description}</p>
+              <ReactMarkdown source={course.description} />
             </div>
           </div>
         </div>
@@ -83,14 +99,7 @@ class CourseDetail extends Component {
               <li className="course--stats--list--item">
                 <h4>Materials Needed</h4>
                 <ul>
-                  {course.materialsNeeded ? (
-                    course.materialsNeeded
-                      .split("*")
-                      .slice(1)
-                      .map((item, index) => <li key={index}> {item}</li>)
-                  ) : (
-                    <li>No materials needed</li>
-                  )}
+                  <ReactMarkdown source={course.materialsNeeded} />
                 </ul>
               </li>
             </ul>

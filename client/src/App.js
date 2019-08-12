@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import './global.css';
 import withContext from "./Context";
 import Header from "./components/Header";
 import Courses from "./components/Courses";
@@ -10,6 +11,9 @@ import UserSignUp from "./components/UserSignUp"
 import UserSignIn from "./components/UserSignIn";
 import UserSignOut from "./components/UserSignOut";
 import PrivateRoute from "./PrivateRoute";
+import NotFounf from "./components/NotFound";
+import Forbidden from "./components/Forbidden";
+import UnhandledError from "./components/UnhandledError"
 
 const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
@@ -38,10 +42,14 @@ function App() {
           />
           {/***********public routes************/}
           <Route exact path="/" component={CoursesWithContext} />
-          <Route path="/courses/:id" component={CourseDetailWithContext} />
-          <Route path="/signup" component={UserSignUpWithContext} />
-          <Route path="/signin" component={UserSignInWithContext} />
-          <Route path="/signout" component={UserSignOutWithContext} />
+          <Route exact path="/courses/:id" component={CourseDetailWithContext} />
+          <Route exact path="/signup" component={UserSignUpWithContext} />
+          <Route exact path="/signin" component={UserSignInWithContext} />
+          <Route exact path="/signout" component={UserSignOutWithContext} />
+          <Route exact path="/notfound" component={NotFounf} />
+          <Route exact path="/forbidden" component={Forbidden} />
+          <Route exact path="/error" component={UnhandledError} />
+          <Route component={NotFounf} />
         </Switch>
       </div>
     </BrowserRouter>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
-export default class Courses extends Component {
+class Courses extends Component {
   state = {
     courses: []
   };
@@ -10,7 +10,12 @@ export default class Courses extends Component {
     fetch(`${this.props.context.baseUrl}/courses`)
       .then(data => data.json())
       .then(courses => this.setState({ courses: courses }))
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.props.history.push({
+          pathname:  '/error',
+          state: { error: err.message }
+        })
+      });
   }
 
   render() {
@@ -49,3 +54,5 @@ export default class Courses extends Component {
       </div>
       )
     }}
+
+    export default withRouter(Courses)

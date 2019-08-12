@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Cookies from "js-cookie";
 const Context = React.createContext();
 
 export class Provider extends Component {
@@ -16,9 +17,21 @@ export class Provider extends Component {
     }
   };
 
+  componentDidMount() {
+    if (Cookies.getJSON("Auth")) {
+      this.setState(prevState => ({
+        ...prevState,
+        login: {
+          logedUser: Cookies.getJSON("Auth"),
+          errors: []
+        }
+      }));
+    }
+  }
+
   signIn = async (emailAddress, password) => {
-    let loginSuccess = false
-    let data = {}
+    let loginSuccess = false;
+    let data = {};
     const encCredentials = "Basic " + btoa(`${emailAddress}:${password}`);
     const options = {
       headers: {
@@ -29,17 +42,27 @@ export class Provider extends Component {
 
     await fetch(`${this.state.baseUrl}/users`, options)
       .then(res => {
-        data = res
+        data = res;
         if (res.status >= 200 && res.status <= 299) {
-          loginSuccess = true
+          loginSuccess = true;
         } else if (res.status === 401) {
-          loginSuccess = false
+          loginSuccess = false;
         }
       })
-      .catch(err => console.log(err))
-    
+      .catch(err => {
+        this.props.history.push({
+          pathname: "/error",
+          state: { error: err.message }
+        });
+      });
+
     await data.json().then(user => {
-      if(loginSuccess){
+      if (loginSuccess) {
+        Cookies.set(
+          "Auth",
+          { ...user, Authorization: encCredentials },
+          { expires: 1 }
+        );
         this.setState(prevState => ({
           ...prevState,
           login: {
@@ -49,8 +72,8 @@ export class Provider extends Component {
             },
             errors: []
           }
-        }))
-      } else{
+        }));
+      } else {
         this.setState(prevState => ({
           ...prevState,
           login: {
@@ -59,8 +82,8 @@ export class Provider extends Component {
           }
         }));
       }
-    })
-    return loginSuccess
+    });
+    return loginSuccess;
   };
 
   clearLoginErrors = () => {
@@ -74,6 +97,7 @@ export class Provider extends Component {
   };
 
   signOut = () => {
+    Cookies.remove("Auth");
     this.setState(prevState => ({
       ...prevState,
       login: {

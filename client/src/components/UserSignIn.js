@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Link} from "react-router-dom"
+import {Link, withRouter} from "react-router-dom"
 
 class UserSignIn extends Component {
   state = {
@@ -93,4 +93,4 @@ class UserSignIn extends Component {
   }
 }
 
-export default UserSignIn;
+export default withRouter(UserSignIn);

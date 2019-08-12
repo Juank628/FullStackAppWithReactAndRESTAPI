@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {withRouter} from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 
 class CreateCourse extends Component {
   state = {
@@ -38,17 +38,27 @@ class CreateCourse extends Component {
     fetch(`${context.baseUrl}/courses`, options)
       .then(res => {
         if (res.status >= 200 && res.status <= 299) {
-          this.props.history.push('/')
+          this.props.history.push("/");
         } else if (res.status === 400) {
           res.json().then(data => this.setState({ errors: data.errors }));
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.props.history.push({
+          pathname: "/error",
+          state: { error: err.message }
+        });
+      });
   };
 
   render() {
     const { errors } = this.state;
-    const {title, description, estimatedTime, materialsNeeded} = this.state.newCourse
+    const {
+      title,
+      description,
+      estimatedTime,
+      materialsNeeded
+    } = this.state.newCourse;
 
     return (
       <div className="bounds course--detail">
@@ -59,7 +69,9 @@ class CreateCourse extends Component {
               <h2 className="validation--errors--label">Validation errors</h2>
               <div className="validation-errors">
                 <ul>
-                  {errors.map((error, index) => (<li key={index}>{error}</li>))}
+                  {errors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -134,7 +146,7 @@ class CreateCourse extends Component {
               <button
                 className="button button-secondary"
                 type="button"
-                onClick={()=>this.props.history.push('/')}
+                onClick={() => this.props.history.push("/")}
               >
                 Cancel
               </button>
@@ -146,4 +158,4 @@ class CreateCourse extends Component {
   }
 }
 
-export default withRouter(CreateCourse)
+export default withRouter(CreateCourse);

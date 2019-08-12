@@ -14,14 +14,27 @@ class UpdateCourse extends Component {
 
   componentDidMount() {
     fetch(`${this.props.context.baseUrl}/courses/${this.props.match.params.id}`)
-      .then(data => data.json())
-      .then(data => data.course)
-      .then(course => {
-        this.setState({
-          newCourse: course
-        });
+      .then(data => {
+        if (data.status === 404) {
+          this.props.history.push("/notfound");
+        } else {
+          data.json().then(data => {
+            if (data.course.userId !== this.props.context.login.logedUser.id) {
+              this.props.history.push("/forbidden");
+            } else {
+              this.setState({
+                newCourse: data.course
+              });
+            }
+          });
+        }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.props.history.push({
+          pathname: "/error",
+          state: { error: err.message }
+        });
+      });
   }
 
   inputChange = e => {
@@ -54,7 +67,12 @@ class UpdateCourse extends Component {
           res.json().then(data => this.setState({ errors: data.errors }));
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.props.history.push({
+          pathname: "/error",
+          state: { error: err.message }
+        });
+      });
   };
 
   render() {

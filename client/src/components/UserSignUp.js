@@ -43,7 +43,7 @@ export default class UserSignUp extends Component {
       fetch(`${context.baseUrl}/users`, options)
         .then(res => {
           if (res.status >= 200 && res.status <= 299) {
-            context.actions.signIn(emailAddress,password)
+            context.actions.signIn(emailAddress, password);
             this.props.history.push("/");
           } else if (res.status === 400) {
             res.json().then(data => {
@@ -51,7 +51,12 @@ export default class UserSignUp extends Component {
             });
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.props.history.push({
+            pathname: "/error",
+            state: { error: err.message }
+          });
+        });
     } else {
       this.setState({ errors: ["please check the password confirmation"] });
     }
