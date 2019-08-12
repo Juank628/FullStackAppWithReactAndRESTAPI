@@ -26,6 +26,7 @@ class UserSignIn extends Component {
   render() {
     const { emailAddress, password } = this.state;
     const { errors } = this.props.context.login;
+    const from = this.props.location.state || {from: {pathname: '/authenticated'}}
     return (
       <div className="bounds">
         <div className="grid-33 centered signin">

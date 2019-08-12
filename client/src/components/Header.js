@@ -15,8 +15,7 @@ export default function Header(props) {
             </span>
             <Link
               className="signout"
-              to={"/signin"}
-              onClick={() => props.context.actions.signOut()}
+              to={"/signout"}
             >
               Sign Out
             </Link>

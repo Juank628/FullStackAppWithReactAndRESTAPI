@@ -2,9 +2,6 @@ import React, { Component } from "react";
 const Context = React.createContext();
 
 export class Provider extends Component {
-  constructor() {
-    super();
-  }
 
   state = {
     baseUrl: "http://localhost:5000/api",
