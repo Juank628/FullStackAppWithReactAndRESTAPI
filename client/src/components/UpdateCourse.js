@@ -175,7 +175,7 @@ class UpdateCourse extends Component {
               <button
                 className="button button-secondary"
                 type="button"
-                onClick={() => this.props.history.push("/")}
+                onClick={() => this.props.history.push(`/courses/${this.props.match.params.id}`)}
               >
                 Cancel
               </button>
