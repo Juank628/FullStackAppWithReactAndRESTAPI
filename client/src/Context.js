@@ -7,18 +7,18 @@ export class Provider extends Component {
     baseUrl: "http://localhost:5000/api",
     login: {
       logedUser: {
-        id: "",
-        emailAddress: "",
-        firtName: "",
-        lastName: "",
-        Authorization: null
+        id: Cookies.getJSON("Auth") ? Cookies.getJSON("Auth").id : "",
+        emailAddress: Cookies.getJSON("Auth") ? Cookies.getJSON("Auth").emailAddress : "",
+        firstName: Cookies.getJSON("Auth") ? Cookies.getJSON("Auth").firstName : "",
+        lastName: Cookies.getJSON("Auth") ? Cookies.getJSON("Auth").lastName : "",
+        Authorization: Cookies.getJSON("Auth") ? Cookies.getJSON("Auth").Authorization : null
       },
       errors: []
     }
   };
 
   /*if the user was loged in, the user data is loaded from cookies*/
-  componentDidMount() {
+  /* componentDidMount() {
     if (Cookies.getJSON("Auth")) {
       this.setState(prevState => ({
         ...prevState,
@@ -28,7 +28,7 @@ export class Provider extends Component {
         }
       }));
     }
-  }
+  } */
 
   /*
   if the user is registered in the database, store the user information in 

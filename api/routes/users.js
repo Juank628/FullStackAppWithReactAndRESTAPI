@@ -40,45 +40,39 @@ router.get("/", authenticateUser, (req, res) => {
 router.post("/", (req, res) => {
   const reqUser = req.body;
 
-  if (reqUser.emailAddress) {
-    User.findOne({ where: { emailAddress: reqUser.emailAddress } })
-      .then(foundUser => {
-        if (foundUser) {
-          res.status(400).json({ errors: ["the user alredy exist"] });
+  User.findOne({ where: { emailAddress: reqUser.emailAddress } })
+    .then(foundUser => {
+      if (foundUser) {
+        res.status(400).json({ errors: ["the user alredy exist"] });
+      } else {
+        if (reqUser.password) {
+          reqUser.password = bcrypt.hashSync(reqUser.password);
         } else {
-          if (reqUser.password) {
-            reqUser.password = bcrypt.hashSync(reqUser.password);
-          } else {
-            const err = new Error("password required");
-            throw err;
-          }
-          User.create(reqUser)
-            .then(() =>
-              res
-                .status(201)
-                .location("/")
-                .end()
-            )
-            .catch(err => {
-              let resCode = 0;
-              if (
-                err.name === "SequelizeValidationError" ||
-                err.message === "password required"
-              ) {
-                resCode = 400;
-              } else {
-                resCode = 500;
-              }
-              let errors = [];
-              err.errors.forEach(error => errors.push(error.message));
-              res.status(resCode).json({ errors: errors });
-            });
+          reqUser.password = "";
         }
-      })
-      .catch(err => res.status(400).json({ error: err.message }));
-  } else {
-    res.status(400).json({ errors: ["email is required"] });
-  }
+        User.create(reqUser)
+          .then(() =>
+            res
+              .status(201)
+              .location("/")
+              .end()
+          )
+          .catch(err => {
+            let resCode = 0;
+            if (
+              err.name === "SequelizeValidationError"
+            ) {
+              resCode = 400;
+            } else {
+              resCode = 500;
+            }
+            let errors = [];
+            err.errors.forEach(error => errors.push(error.message));
+            res.status(resCode).json({ errors: errors });
+          });
+      }
+    })
+    .catch(err => res.status(400).json({ errors: err.errors }));
 });
 
 module.exports = router;
