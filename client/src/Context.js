@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 const Context = React.createContext();
 
 export class Provider extends Component {
+
+  /*if the user was loged in, the user data is loaded from cookies*/
   state = {
     baseUrl: "http://localhost:5000/api",
     login: {
@@ -16,19 +18,6 @@ export class Provider extends Component {
       errors: []
     }
   };
-
-  /*if the user was loged in, the user data is loaded from cookies*/
-  /* componentDidMount() {
-    if (Cookies.getJSON("Auth")) {
-      this.setState(prevState => ({
-        ...prevState,
-        login: {
-          logedUser: Cookies.getJSON("Auth"),
-          errors: []
-        }
-      }));
-    }
-  } */
 
   /*
   if the user is registered in the database, store the user information in 
